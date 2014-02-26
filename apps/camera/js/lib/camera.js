@@ -643,4 +643,28 @@ Camera.prototype.updateVideoElapsed = function() {
   this.set('videoElapsed', (now - start));
 };
 
+/**
+ *set HDR mode on/Off from settings
+ *@ parameter receive value On/Off
+ */
+Camera.prototype.setHDRMode = function(value){
+  if (value == 'on') {
+    this.setSceneMode('hdr');
+  } else {
+    this.setSceneMode('auto');
+  }
+};
+
+/**
+* configure scene mode value 
+*@ parameter value to set in scene mode
+**/
+
+Camera.prototype.setSceneMode = function(value){
+  var modes =  this.get('capabilities').sceneModes;
+  if (modes.indexOf(value) > -1) {
+    this.mozCamera.sceneMode  = value;
+  }
+};
+
 });

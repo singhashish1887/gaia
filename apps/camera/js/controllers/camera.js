@@ -92,6 +92,8 @@ CameraController.prototype.bindEvents = function() {
   settings.flashModes.on('change:selected', this.setFlashMode);
   settings.on('change:cameras', this.loadCamera);
   settings.on('change:mode', this.setMode);
+  settings.on('change:hdr', this.camera.setHDRMode);
+
   debug('events bound');
 };
 
@@ -99,6 +101,8 @@ CameraController.prototype.onSettingsConfigured = function() {
   var settings = this.app.settings;
   var recorderProfile = settings.recorderProfiles.selected('key');
   var pictureSize = settings.pictureSizes.selected('data');
+  var hdrMode = settings.hdr.selected('key');
+  this.camera.setHDRMode(hdrMode);
   this.setFlashMode();
   this.camera
     .setRecorderProfile(recorderProfile)
