@@ -100,6 +100,10 @@ OverlayController.prototype.getOverlayData = function(type) {
       data.title = l10n.get('pluggedin-title');
       data.body = l10n.get('pluggedin-text');
     break;
+    case 'battery-low':
+      data.title = l10n.get('battery-low-title');
+      data.body = l10n.get('battery-low-text');
+    break;
     default:
       return false;
   }

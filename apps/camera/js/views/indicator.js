@@ -14,15 +14,18 @@ var orientation = require('lib/orientation');
  */
 module.exports = View.extend({
   name:'indicator',
+
   initialize: function() {
     this.render();
   },
+
   render: function() {
     this.el.innerHTML = this.template();
     this.els.batterystatus = find('.js-battery-status', this.el);
     this.setOrientation(orientation.get());
     orientation.on('orientation', this.setOrientation);
   },
+
   template: function() {
     return '<ul>'+
            '<li class="js-battery-status batteryStatus rotates">'+
@@ -32,20 +35,28 @@ module.exports = View.extend({
   /**
    * Set low battery  Incicator
    */
+
   setBatteryStatus: function(batteryObj) {
-    this.els.batterystatus.classList.remove('icon-battery-15');
-    this.els.batterystatus.classList.remove('icon-battery-10');
     var className = batteryObj.icon;
+    this.removeBatteryIndicator();
     this.els.batterystatus.classList.add(className);
     this.els.batterystatus.dataset.value = batteryObj.value;
   },
+
+  removeBatteryIndicator: function(){
+    this.els.batterystatus.classList.remove('icon-battery-15');
+    this.els.batterystatus.classList.remove('icon-battery-10');
+  },
+
   /**
    * on orientation change 
    * set the orientation for indicator
    */
+
   setOrientation: function(orientation) {
     this.el.dataset.orientation = orientation;
     this.els.batterystatus.dataset.orientation = orientation;
   }
+  
 });
 });

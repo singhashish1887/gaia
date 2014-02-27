@@ -34,6 +34,7 @@ require(['config/require', 'config'], function() {
       indicator:require('controllers/indicator'),
       sounds: require('controllers/sounds'),
       lowBattery:require('controllers/low-battery'),
+      notification:require('controllers/notification')
     };
 
     debug('required dependencies');

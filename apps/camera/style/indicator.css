@@ -3,53 +3,56 @@
   z-index: 10;
   position: absolute;
   top: 40%;
-  left:3%;
+  left: 3%;
   margin: 0px ;
   padding: 0px ;
-  border:none;
+  border: none;
   background: transparent;
 }
+
 .indicator[data-orientation='180'] {
-  top:40%;
+  top: 40%;
   left: 90%;
-  transform:rotate(180deg);
+  transform: rotate(0deg);
 }
 
 .indicator ul {
-  border:none;
-  margin:0;
+  border: none;
+  margin: 0;
   padding: 0;
   background: transparent;
 }
+
 .indicator li {
-  height: 3.0rem;
-  width: 3.0rem;
-  background-image: url(images/Viewfinder-Indicator-Underlay.svg);
-  background-size: 40px 40px;
-  border-radius: 20%;
-  background-position: center center;
-  background-repeat: no-repeat;
+  height: 25px;
+  width: 25px;
+  background-color: #FFFFFF;
+  border-radius: 8px;
   list-style: none;
-  opacity: 1;
+  opacity: 0;
   margin-bottom:12px;
   padding: 0;
+  font-size: 25px;
+  text-align: center;
 }
 
+.indicator li[data-mode=off]{
+  opacity: 0.2;
+}
 
-.batteryStatus[data-orientation='180'] {
-  transform:rotate(0deg);
-} 
-.batteryStatus{
+.indicator li[data-mode=on]{
   opacity: 0.8;
-  font-size: 40px;
-  color:#D92E2E;
+  color: #008EAB;
 }
 
+.indicator .batteryStatus {
+  background-color: transparent;
+  color: #D92E2E; 
+  opacity: 0.8;
+  font-size: 30px;
+}
 
-
-
-.batteryStatus[data-value='6']{
-  
+.indicator .batteryStatus[data-value='6']{
   transition: background-image 2s ease-in-out;
   animation-name: cf3FadeInOut;
   animation-timing-function: ease-in-out;
@@ -58,19 +61,11 @@
   animation-direction: alternate;
 }
 
-
-
 @keyframes cf3FadeInOut {
   0% {
-  opacity:1;
-}
-45% {
-opacity:1;
-}
-55% {
-opacity:0;
-}
-100% {
-opacity:0;
-}
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }

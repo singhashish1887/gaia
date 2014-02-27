@@ -13,11 +13,13 @@ module.exports = {
     option: {
       'Battery': {
         status:true,
-        eventName:['lowbattery'],
+        eventName:['lowbattery', 'battery:low-10', 'battery:low-15', 
+                  'battery:critical-6',  'battery:critical', 
+                  'battery:healthy', 'battery:charging '],
       },
       'Geolocation': {
         status:false,
-        eventName:['visibilitychange','settings:configured'],
+        eventName:['visibilitychange', 'settings:configured'],
       },
       'HDR':{
         status:false,
@@ -31,25 +33,36 @@ module.exports = {
   },
   lowbattery: {
     '15':{
-       message:'You have 15% battery remaining',
-       icon:'icon-battery-15',
-       value:15,
+      message:'battery-low-15-text',
+      icon:'icon-battery-15',
+      events: 'battery:low-15',
+      value:15,
     },
     '10':{
-       message:'You have 10% battery remaining',
-       icon:'icon-battery-10',
-       value:10,
+      message:'battery-low-10-text',
+      icon:'icon-battery-10',
+      events: 'battery:low-10',
+      value:10,
     },
     '6':{
-       isBlink:true,
-       message:'Critically low battery',
-       icon:'icon-battery-10',
-       value:6,
+      isSticky:true,
+      message:'battery-low-critical-6-text',
+      icon:'icon-battery-10',
+      events: 'battery:critical-6',
+      value:6,
     },
     '5':{
-      message:'The battery is too low to use the Camera',
-      title:'Low Battery',
-       value:5,
+      isFulleScreen:true,
+      message:'battery-low-critical-text',
+      title:'battery-low-critical-title',
+      events: 'battery:critical',
+      icon:'',
+      value:5,
+    },
+    'healthy':{
+      events: 'battery:healthy',
+      icon:'',
+      value:0,
     }
   }
 };
