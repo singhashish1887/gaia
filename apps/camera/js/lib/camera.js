@@ -117,6 +117,7 @@ Camera.prototype.gotCamera = function(mozCamera) {
   this.configureFocus(capabilities.focusModes);
   this.set('capabilities', this.formatCapabilities(capabilities));
   this.setWhiteBalance('auto');
+  this.setISOMode('auto');
 };
 
 Camera.prototype.formatCapabilities = function(capabilities) {
@@ -750,6 +751,18 @@ Camera.prototype.setSceneMode = function(value){
   var modes =  this.get('capabilities').sceneModes;
   if (modes.indexOf(value) > -1) {
     this.mozCamera.sceneMode = value;
+  }
+};
+
+/**
+ *Set ISO value for 
+ * better picture 
+ **/
+Camera.prototype.setISOMode = function(value) {
+  var capabilities = this.get('capabilities');
+  var hasISO = 'isoModes' in capabilities ? capabilities.isoModes : [];
+  if (hasISO.indexOf(value) > -1 ) {
+    this.mozCamera.isoMode = value;
   }
 };
 
