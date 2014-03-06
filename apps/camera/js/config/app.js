@@ -195,6 +195,7 @@ module.exports = {
         title: 'l10n-on'
       }
     ],
+    selected: 'off',
     persistent: true,
     menu: 8
   },
