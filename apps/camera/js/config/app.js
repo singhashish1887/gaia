@@ -216,7 +216,7 @@ module.exports = {
         title: 'Beauty'
       }
     ],
-    persistent: true,
+    persistent: false,
     menu: 9
   },
 
