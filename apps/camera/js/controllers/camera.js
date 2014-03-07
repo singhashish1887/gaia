@@ -114,6 +114,9 @@ CameraController.prototype.onSettingsConfigured = function() {
   this.camera.setPictureSize(pictureSize);
   this.camera.configure();
 
+  if (!this.settings.isoModes.get('isDisable')) {
+    this.camera.setISOMode(this.settings.isoModes.selected('key'));
+  }
   // TODO: Move to a new StorageController (or App?)
   var maxFileSize = (pictureSize.width * pictureSize.height * 4) + 4096;
   this.storage.setMaxFileSize(maxFileSize);

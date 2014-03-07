@@ -35,7 +35,17 @@ module.exports = {
     ],
     persistent: false
   },
-
+  isoModes: {
+    title: 'isoModes',
+    isDisable: false,
+    options: [
+      {
+        key: 'auto',
+        title: 'Auto'
+      }
+    ],
+    selected:'auto'
+  },
   pictureSizesFront: {
     title: 'l10n-camera-resolution',
     icon: 'icon-picture-size',

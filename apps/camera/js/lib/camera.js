@@ -117,7 +117,6 @@ Camera.prototype.gotCamera = function(mozCamera) {
   this.configureFocus(capabilities.focusModes);
   this.set('capabilities', this.formatCapabilities(capabilities));
   this.setWhiteBalance('auto');
-  this.setISOMode('auto');
 };
 
 Camera.prototype.formatCapabilities = function(capabilities) {
