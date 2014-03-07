@@ -116,9 +116,7 @@ Camera.prototype.gotCamera = function(mozCamera) {
   this.mozCamera.onRecorderStateChange = this.onRecorderStateChange;
   this.configureFocus(capabilities.focusModes);
   this.set('capabilities', this.formatCapabilities(capabilities));
-  if (constants.WHITE_BALANCE_SUPPORT) {
-    this.setWhiteBalance(constants.WHITE_BALANCE_DEFAULT);
-  }
+  
 };
 
 Camera.prototype.formatCapabilities = function(capabilities) {
@@ -722,8 +720,9 @@ Camera.prototype.updateVideoElapsed = function() {
  */
 Camera.prototype.setWhiteBalance = function(value){
   var capabilities = this.get('capabilities');
-  var modes = capabilities.whiteBalanceModes;
-  if (modes.indexOf(value) > -1) {
+  var modes = capabilities.whiteBalanceModes ?
+              capabilities.whiteBalanceModes : undefined;
+  if (modes && modes.indexOf(value) > -1) {
     this.mozCamera.whiteBalanceMode = value;
   }
 };

@@ -108,6 +108,9 @@ CameraController.prototype.onSettingsConfigured = function() {
   var pictureSize = this.settings.pictureSizes.selected('data');
   var hdr = this.settings.hdr.selected('key');
 
+  if ( !this.settings.whiteBalance.get('isDisable')) {
+    this.camera.setWhiteBalance(this.settings.whiteBalance.selected('key'));
+  }
   this.setFlashMode();
   this.camera.setHDR(hdr);
   this.camera.setRecorderProfile(recorderProfile);

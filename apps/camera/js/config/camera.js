@@ -44,11 +44,8 @@ module.exports = {
 
   MIN_VIEWFINDER_SCALE: 1.0,
 
-  MAX_VIEWFINDER_SCALE: 4.0,
+  MAX_VIEWFINDER_SCALE: 4.0
 
-  WHITE_BALANCE: 'whiteBalanceModes',
-  WHITE_BALANCE_SUPPORT: true,
-  WHITE_BALANCE_DEFAULT: 'auto'
 };
 
 });

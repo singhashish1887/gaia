@@ -21,6 +21,18 @@ module.exports = {
     persistent: false
   },
 
+  whiteBalance: {
+    title: 'whiteBalanceModes',
+    isDisable: false,
+    options: [
+      {
+        key: 'auto',
+        title: 'Auto'
+      }
+    ],
+    selected:'auto'
+  },
+
   cameras: {
     title: 'Selected Camera',
     options: [
