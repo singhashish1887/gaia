@@ -78,6 +78,9 @@ module.exports = View.extend({
   },
 
   addItem: function(model) {
+    if (model.get('isDisable')) {
+      return;
+    }
     var setting = new SettingView({ model: model })
       .render()
       .appendTo(this.els.items)

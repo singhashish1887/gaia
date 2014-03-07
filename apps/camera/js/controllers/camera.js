@@ -32,6 +32,8 @@ function CameraController(app) {
   this.viewfinder = app.views.viewfinder;
   this.controls = app.views.controls;
   this.hud = app.views.hud;
+  this.isHDREnable = this.settings.hdr.get('isDisable') ?
+                     false : true;
   this.configure();
   this.bindEvents();
   debug('initialized');
@@ -98,7 +100,9 @@ CameraController.prototype.bindEvents = function() {
   settings.on('change:cameras', this.loadCamera);
   settings.on('change:mode', this.setFlashMode);
   settings.on('change:mode', this.setMode);
-  settings.on('change:hdr', this.camera.setHDR);
+  if (this.isHDREnable) {
+    settings.on('change:hdr', this.setHDR);
+  }
 
   debug('events bound');
 };
@@ -106,10 +110,14 @@ CameraController.prototype.bindEvents = function() {
 CameraController.prototype.onSettingsConfigured = function() {
   var recorderProfile = this.settings.recorderProfiles.selected('key');
   var pictureSize = this.settings.pictureSizes.selected('data');
-  var hdr = this.settings.hdr.selected('key');
 
   this.setFlashMode();
-  this.camera.setHDR(hdr);
+
+  if (this.isHDREnable) {
+    var hdr = this.settings.hdr.selected('key');
+    this.camera.setHDR(hdr);
+  }
+  
   this.camera.setRecorderProfile(recorderProfile);
   this.camera.setPictureSize(pictureSize);
   this.camera.configure();
@@ -273,6 +281,14 @@ CameraController.prototype.loadCamera = function(value) {
 CameraController.prototype.setFlashMode = function() {
   var mode = this.settings.flashModes.selected('key');
   this.camera.setFlashMode(mode);
+  if (this.isHDREnable) {
+    var hdrMode = this.settings.hdr.selected('key');
+    var isFlashOn = mode != 'off' ? true : false;
+    if (hdrMode == 'on' &&  isFlashOn) {
+      this.settings.hdr.select('off');
+    }
+  }
+  
 };
 
 /**
@@ -318,4 +334,18 @@ CameraController.prototype.cancelSelfTimer = function(){
       this.selfTimerView.removeTimerUI();
     }
 };
+
+CameraController.prototype.setHDR = function(value) {
+  var settings = this.app.settings;
+  var flashMode = settings.flashModes.selected('key');
+  var model = settings.mode.selected('key') == 'video' ?
+              settings.flashModesVideo : settings.flashModesPicture;
+  var isFlashOn = flashMode != 'off' ? true : false;
+
+  if (value == 'on' &&  isFlashOn) {
+    model.select('off');
+  }
+  this.camera.setHDR(value);
+};
+
 });

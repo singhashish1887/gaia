@@ -5,6 +5,7 @@ module.exports = {
   showSettings: true,
   newControls: true,
   showIndicators: true,
+
   mode: {
     title: 'Mode',
     options: [
@@ -184,6 +185,7 @@ module.exports = {
   hdr: {
     title: 'HDR',
     icon: 'icon-hdr',
+    isDisable: false,
     options: [
       {
         key: 'off',
