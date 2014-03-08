@@ -719,9 +719,8 @@ Camera.prototype.updateVideoElapsed = function() {
  * @param {String} value
  */
 Camera.prototype.setWhiteBalance = function(value){
-  var capabilities = this.get('capabilities');
-  var modes = capabilities.whiteBalanceModes ?
-              capabilities.whiteBalanceModes : undefined;
+  var capabilities = this.mozCamera.capabilities;
+  var modes = capabilities.whiteBalanceModes ;
   if (modes && modes.indexOf(value) > -1) {
     this.mozCamera.whiteBalanceMode = value;
   }
@@ -748,11 +747,9 @@ Camera.prototype.setHDR = function(value){
  * @param {String} value
  */
 Camera.prototype.setSceneMode = function(value){
-  var capabilities = this.mozCamera.capabilities;
-  var modes = constants.WHITE_BALANCE in capabilities ? 
-              capabilities.whiteBalanceModes : undefined;
-  if (modes && modes.indexOf(value) > -1) {
-    this.mozCamera.whiteBalanceMode = value;
+  var modes =  this.get('capabilities').sceneModes;
+  if (modes.indexOf(value) > -1) {
+    this.mozCamera.sceneMode = value;
   }
 };
 

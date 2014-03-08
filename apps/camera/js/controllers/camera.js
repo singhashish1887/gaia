@@ -108,9 +108,7 @@ CameraController.prototype.onSettingsConfigured = function() {
   var pictureSize = this.settings.pictureSizes.selected('data');
   var hdr = this.settings.hdr.selected('key');
 
-  if ( !this.settings.whiteBalance.get('isDisable')) {
-    this.camera.setWhiteBalance(this.settings.whiteBalance.selected('key'));
-  }
+  this.setWhiteBalance();
   this.setFlashMode();
   this.camera.setHDR(hdr);
   this.camera.setRecorderProfile(recorderProfile);
@@ -321,4 +319,11 @@ CameraController.prototype.cancelSelfTimer = function(){
       this.selfTimerView.removeTimerUI();
     }
 };
+
+CameraController.prototype.setWhiteBalance = function() {
+  if ( !this.settings.whiteBalance.get('disabled')) {
+    this.camera.setWhiteBalance(this.settings.whiteBalance.selected('key'));
+  }
+};
+
 });

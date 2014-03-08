@@ -22,8 +22,7 @@ module.exports = {
   },
 
   whiteBalance: {
-    title: 'whiteBalanceModes',
-    isDisable: false,
+    disabled: false,
     options: [
       {
         key: 'auto',
