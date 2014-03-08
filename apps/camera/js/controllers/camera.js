@@ -113,10 +113,7 @@ CameraController.prototype.onSettingsConfigured = function() {
   this.camera.setRecorderProfile(recorderProfile);
   this.camera.setPictureSize(pictureSize);
   this.camera.configure();
-
-  if (!this.settings.isoModes.get('isDisable')) {
-    this.camera.setISOMode(this.settings.isoModes.selected('key'));
-  }
+  this.setISO();
   // TODO: Move to a new StorageController (or App?)
   var maxFileSize = (pictureSize.width * pictureSize.height * 4) + 4096;
   this.storage.setMaxFileSize(maxFileSize);
@@ -321,4 +318,10 @@ CameraController.prototype.cancelSelfTimer = function(){
       this.selfTimerView.removeTimerUI();
     }
 };
+
+CameraController.prototype.setISO = function() {
+  if (this.settings.isoModes.get('disabled')) { return; }
+  this.camera.setISOMode(this.settings.isoModes.selected('key'));
+};
+
 });

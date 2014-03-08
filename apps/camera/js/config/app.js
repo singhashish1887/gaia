@@ -36,8 +36,7 @@ module.exports = {
     persistent: false
   },
   isoModes: {
-    title: 'isoModes',
-    isDisable: false,
+    disabled: false,
     options: [
       {
         key: 'auto',

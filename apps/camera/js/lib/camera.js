@@ -759,7 +759,7 @@ Camera.prototype.setSceneMode = function(value){
  **/
 Camera.prototype.setISOMode = function(value) {
   var capabilities = this.get('capabilities');
-  var isoModes = 'isoModes' in capabilities ? capabilities.isoModes : [];
+  var isoModes = capabilities.isoModes;
   if (isoModes && isoModes.indexOf(value) > -1 ) {
     this.mozCamera.isoMode = value;
   }
