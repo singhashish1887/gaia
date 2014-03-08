@@ -32,8 +32,7 @@ function CameraController(app) {
   this.viewfinder = app.views.viewfinder;
   this.controls = app.views.controls;
   this.hud = app.views.hud;
-  this.isHDREnable = this.settings.hdr.get('isDisable') ?
-                     false : true;
+  this.hdrEnabled = !this.settings.hdr.get('disabled');
   this.configure();
   this.bindEvents();
   debug('initialized');
@@ -100,9 +99,8 @@ CameraController.prototype.bindEvents = function() {
   settings.on('change:cameras', this.loadCamera);
   settings.on('change:mode', this.setFlashMode);
   settings.on('change:mode', this.setMode);
-  if (this.isHDREnable) {
-    settings.on('change:hdr', this.setHDR);
-  }
+  settings.on('change:hdr', this.setHDR);
+
 
   debug('events bound');
 };
@@ -113,11 +111,7 @@ CameraController.prototype.onSettingsConfigured = function() {
 
   this.setFlashMode();
 
-  if (this.isHDREnable) {
-    var hdr = this.settings.hdr.selected('key');
-    this.camera.setHDR(hdr);
-  }
-  
+  this.setHDR(this.settings.hdr.selected('key'));
   this.camera.setRecorderProfile(recorderProfile);
   this.camera.setPictureSize(pictureSize);
   this.camera.configure();
@@ -281,7 +275,7 @@ CameraController.prototype.loadCamera = function(value) {
 CameraController.prototype.setFlashMode = function() {
   var mode = this.settings.flashModes.selected('key');
   this.camera.setFlashMode(mode);
-  if (this.isHDREnable) {
+  if (this.hdrEnabled) {
     var hdrMode = this.settings.hdr.selected('key');
     var isFlashOn = mode != 'off' ? true : false;
     if (hdrMode == 'on' &&  isFlashOn) {
@@ -336,6 +330,7 @@ CameraController.prototype.cancelSelfTimer = function(){
 };
 
 CameraController.prototype.setHDR = function(value) {
+  if ( !this.hdrEnabled ) { return; }
   var settings = this.app.settings;
   var flashMode = settings.flashModes.selected('key');
   var model = settings.mode.selected('key') == 'video' ?

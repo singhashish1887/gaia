@@ -185,7 +185,7 @@ SettingsController.prototype.filterMenuItem = function(item) {
     }
     return true;
   };
-
+   if (setting.get('disabled')) { return false;}
   return hasOptions ? test(item.condition) : false;
 };
 

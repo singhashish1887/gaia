@@ -104,11 +104,14 @@ suite('controllers/camera', function() {
     test('Should set flashMode', function() {
       this.controller.onSettingsConfigured();
       assert.ok(this.camera.setFlashMode.calledWith('on'));
+      assert.ok(this.camera.setFlashMode.calledWith('auto'));
+      assert.ok(this.camera.setFlashMode.calledWith('off'));
     });
 
     test('Should set hdr', function() {
       this.controller.onSettingsConfigured();
       assert.ok(this.camera.setHDR.calledWith('on'));
+      assert.ok(this.camera.setHDR.calledWith('off'));
     });
 
     test('Should set recorderProfile', function() {
