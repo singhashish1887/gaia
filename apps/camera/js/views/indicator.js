@@ -6,14 +6,14 @@ define(function(require, exports, module) {
  */
 
 var View = require('vendor/view');
-var bind = require('lib/bind');
 var find = require('lib/find');
-var orientation = require('lib/orientation');
 /**
- *Exports
+ * Exports
  */
+
 module.exports = View.extend({
-  name:'indicator',
+  name:'indicators',
+  tag: 'ul',
 
   initialize: function() {
     this.render();
@@ -21,42 +21,31 @@ module.exports = View.extend({
 
   render: function() {
     this.el.innerHTML = this.template();
-    this.els.batterystatus = find('.js-battery-status', this.el);
-    this.setOrientation(orientation.get());
-    orientation.on('orientation', this.setOrientation);
+    this.els.battery = find('.indicator_battery', this.el);
   },
 
   template: function() {
-    return '<ul>'+
-           '<li class="js-battery-status batteryStatus rotates">'+
-           '</li></ul>';
+    return '<li class="indicator_timer icon-timer rotates"></li>'+
+    '<li class="indicator_geotagging icon-geo-location rotates"></li>'+
+    '<li class="indicator_hdr icon-hdr rotates"></li>'+
+    '<li class="indicator_battery rotates"></li>';
   },
- 
-  /**
-   * Set low battery  Incicator
-   */
-
-  setBatteryStatus: function(batteryObj) {
+  
+  setBattery: function(batteryObj) {
     var className = batteryObj.icon;
     this.removeBatteryIndicator();
-    this.els.batterystatus.classList.add(className);
-    this.els.batterystatus.dataset.value = batteryObj.value;
+    this.els.battery.classList.add(className);
+    this.set('battery', batteryObj.value);
+    this.els.battery.dataset.value = batteryObj.value;
+    console.log(' className :: '+className+'     this.els.battery:: '+this.els.battery.dataset.value);
   },
-
-  removeBatteryIndicator: function(){
-    this.els.batterystatus.classList.remove('icon-battery-15');
-    this.els.batterystatus.classList.remove('icon-battery-10');
-  },
-
-  /**
-   * on orientation change 
-   * set the orientation for indicator
-   */
-
-  setOrientation: function(orientation) {
-    this.el.dataset.orientation = orientation;
-    this.els.batterystatus.dataset.orientation = orientation;
-  }
   
+  removeBatteryIndicator: function() {
+    this.els.battery.classList.remove('icon-battery-15');
+    this.els.battery.classList.remove('icon-battery-10');
+     this.set('battery', 0);
+    this.els.battery.dataset.value = 0;
+  }
+
 });
 });

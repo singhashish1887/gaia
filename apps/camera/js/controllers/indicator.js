@@ -1,99 +1,105 @@
 define(function(require, exports, module) {
-/*jshint laxbreak:true*/
+'use strict';
 
-  'use strict';
+/**
+ * Dependencies
+ */
 
-  /**
-  * Dependencies
-  */
+var debug = require('debug')('controller:indicator');
+var bindAll = require('lib/bind-all');
 
-  var bindAll = require('lib/bind-all');
-  var debug = require('debug')('controller:indicator');
-  var bind = require('lib/bind');
+/**
+ * Exports
+ */
+
+module.exports = function(app) { return new IndicatorController(app); };
+module.exports.IndicatorController = IndicatorController;
+
+/**
+ * Initialize a new `IndicatorsController`
+ *
+ * @param {Object} options
+ */
+
+function IndicatorController(app) {
+  debug('initializing');
+  bindAll(this);
+  this.app = app;
+  this.settings = app.settings;
+  this.indicator = app.views.indicator;
+  this.indicatorIcons = this.settings.indicators.get('icons');
+  var enabled = this.settings.indicators.get('enabled');
+  if (enabled) { this.bindEvents(); }
+  debug('initialized :: ');
+}
+
+IndicatorController.prototype.bindEvents = function() {
+  this.app.on('settings:configured', this.configure);
+
+  if (this.indicatorIcons.timer) {
+    this.settings.timer.on('change:selected', this.indicator.setter('timer'));
+  }
   
-  /**
-  * Local variables
-  **/
-
-  var indicatorConfig = require('config/indicator');
-
-  /**
-  * Exports
-  */
-
-  exports = module.exports = function(app) {
-    return new IndicatorController(app);
-  };
-
-  /**
-  * Initialize a new `IndicatorController`
-  *
-  * @param {Object} options
-  */
-
-  function IndicatorController(app) {
-    debug('initializing');
-    this.indicator = app.views.indicator;
-    this.camera = app.camera;
-    this.app = app;
-    //this.battery = navigator.battery || navigator.webkitBattery || navigator.mozBattery;
-    this.requireData = null;
-    bindAll(this);
-    this.setup();
-    debug('initialized');
+  if (this.indicatorIcons.hdr) {
+    this.settings.hdr.on('change:selected', this.indicator.setter('hdr'));
+  }
+  
+  if (this.indicatorIcons.geolocation) {
+    this.app.on('focus', this.geoLocationStatus);
   }
 
-  /**
-  * get the indicators if it is enabled.
-  *
-  */
+  if (this.indicatorIcons.battery) {
+    this.app.on('battery:healthy', this.indicator.removeBatteryIndicator);
+    this.app.on('battery:charging', this.indicator.removeBatteryIndicator);
+    this.app.on('battery:very-low', this.indicator.setBattery);
+    this.app.on('battery:low', this.indicator.setBattery);
+    this.app.on('battery:near-critical', this.indicator.setBattery);
+    this.app.on('battery:critical', this.indicator.setBattery); 
+  }
+};
 
-  IndicatorController.prototype.setup = function() {
-    if (indicatorConfig.Indicators.status) {
-      this.requireData = indicatorConfig.Indicators.require ? 
-                         require(indicatorConfig.Indicators.require) : null;
-      this.getIndicators();
-    }
-  };
+IndicatorController.prototype.configure = function() {
 
-  /**
-  * get the enabled indicators and add to the indicators .
-  *
-  */
+  if (this.indicatorIcons.hdr) {
+    this.indicator.set('hdr', this.settings.hdr.selected('key'));
+  }
 
-   IndicatorController.prototype.getIndicators = function() {
-    var indicatorOpt = indicatorConfig.Indicators.option;
-    for (var index in indicatorOpt) {
-      if (indicatorOpt[index].status) {
-        this.addIndicators(index,indicatorOpt[index]);
-      }  
-    }
+  if (this.indicatorIcons.timer) {
+    this.indicator.set('timer', this.settings.timer.selected('key'));
+  }
 
-  };
+  if (this.indicatorIcons.geolocation) {
+   this.geoLocationStatus();
+  }
+  this.indicator.show();
+};
 
-  /**
-  * get the acheck the indicator and set the lisners .
-  *
-  */
-
-  IndicatorController.prototype.addIndicators = function(name, indicatorObj) {
-    var events = indicatorObj.eventName;
-    switch (name) {
-      case "Battery":{
-        this.bindBatteryEvents(events);
-        break;
+IndicatorController.prototype.geoLocationStatus = function() {
+  var position = this.app.geolocation.position;
+  var mozPerms = navigator.mozPermissionSettings;
+  var apps = navigator.mozApps;
+  var indicator = this.indicator;
+  var self = this;
+  apps.mgmt.getAll().onsuccess = function mozAppGotAll(evt) {
+    var apps = evt.target.result;
+    apps.forEach(function(app) {
+      if (app.manifest.name == "Camera") {  //change Camera to CameraMadai for madai
+        var value = mozPerms.get("geolocation", app.manifestURL, app.origin, false);
+        switch (value) {
+          case "allow":
+            self.indicator.set('geotagging', 'on');
+            break;
+          case "deny":
+            self.indicator.set('geotagging', 'off');
+            break;
+          case "prompt":{
+            setTimeout(function(){self.geoLocationStatus();},500);
+            break;
+          }
+        }
       }
-    }
-    
+    });
   };
+};
 
- IndicatorController.prototype.bindBatteryEvents = function(events) {
-    for (var evt in events) {
-      this.app.on(events[evt], this.batteryIndicator);
-    }
-  };
-  
-  IndicatorController.prototype.batteryIndicator = function(level) {
-    this.indicator.setBatteryStatus(level);
-  };
 });

@@ -7,7 +7,6 @@ define(function(require, exports, module) {
 
 var View = require('vendor/view');
 var find = require('lib/find');
-var orientation = require('lib/orientation');
 /**
  * Exports
  */
@@ -18,14 +17,12 @@ module.exports = View.extend({
   initialize: function(options) {
     var l10n = navigator.mozL10n;
     this.message = l10n.get(options.message);
-    this.title = options.title ? 
+    this.title = options.title ?
                  l10n.get(options.title) : null;
     this.fullScreen = options.isFulleScreen;
     this.icon = options.icon ? options.icon : null;
     this.el.innerHTML = this.render();
     this.els.notification = find('.js-notification', this.el);
-    orientation.on('orientation', this.setOrientation);
-    this.setOrientation(orientation.get());
     this.setMessage(this.fullScreen);
   },
 
@@ -42,15 +39,9 @@ module.exports = View.extend({
   
   showFullScreenMessage: function() {
     var messages = '<div class = "messageTitle" >'+this.title+'</div>'+
-                   '<div class = "message" >'+this.message+ ' </div>';
-    
+                   '<div class = "message" >'+this.message+ ' </div>'; 
     this.els.notification.innerHTML = messages;
     this.els.notification.classList.add('fullScreen');
-  },
-
-
-  setOrientation: function(orientation) {
-    this.el.dataset.orientation = orientation;
   },
   
   setMessage: function(type) {

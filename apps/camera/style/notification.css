@@ -50,13 +50,13 @@
   color: #D92E2E;
 }
 
-.notification[data-orientation="90"] .normal {
+.deg90 .notification .normal {
   left: 50%;
   bottom: 45%;
   transform: rotate(270deg);
 }
 
-.notification[data-orientation="270"] .normal {
+.deg270 .notification .normal {
   left: -5%;
   bottom: 45%;
   transform: rotate(90deg);

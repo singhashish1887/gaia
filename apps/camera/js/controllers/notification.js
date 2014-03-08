@@ -47,16 +47,17 @@ function NotificationController(app) {
  */
 
 NotificationController.prototype.bindEvents = function() {
-  this.app.on('battery:healthy', this.removeAllNotification); 
-  this.app.on('battery:critical-6', this.onLowBattery); 
-  this.app.on('battery:low-10', this.onLowBattery);
-  this.app.on('battery:low-15', this.onLowBattery); 
+  this.app.on('battery:healthy', this.removeAllNotification);
+  this.app.on('battery:charging', this.removeAllNotification);
+  this.app.on('battery:very-low', this.onLowBattery);
+  this.app.on('battery:low', this.onLowBattery);
+  this.app.on('battery:near-critical', this.onLowBattery);
   this.app.on('battery:critical', this.onLowBattery);
 };
 
 NotificationController.prototype.onLowBattery = function(lowBatteryObj) {
   this.checkNotificationQueue();
-  var self = this; 
+  var self = this;
   var notification = new NotificationView(lowBatteryObj);
   notification.appendTo(document.body);
   if (!lowBatteryObj.isSticky) {
@@ -72,9 +73,9 @@ NotificationController.prototype.onLowBattery = function(lowBatteryObj) {
 };
 
 NotificationController.prototype.checkNotificationQueue = function() {
- if (this.notification.length > 0) {
- 	this.clearNotificationQueue(this.notification[0]);
- }
+  if (this.notification.length > 0) {
+ 	  this.clearNotificationQueue(this.notification[0]);
+  }
 };
 
 NotificationController.prototype.clearNotificationQueue = function(notification) {
@@ -82,13 +83,12 @@ NotificationController.prototype.clearNotificationQueue = function(notification)
   this.timeout = null;
   notification.destroy();
   this.notification = [];
-  
 };
 
 NotificationController.prototype.removeAllNotification = function() {
-  if(this.persistant) {
+  if (this.persistant) {
     this.persistent.destroy();
-    this.persistent = null; 
+    this.persistent = null;
   }
   this.checkNotificationQueue();
 };
