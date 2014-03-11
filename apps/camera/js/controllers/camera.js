@@ -321,7 +321,7 @@ CameraController.prototype.cancelSelfTimer = function(){
 };
 
 CameraController.prototype.setWhiteBalance = function() {
-  if ( !this.settings.whiteBalance.get('disabled')) {
+  if (!this.settings.whiteBalance.get('disabled')) {
     this.camera.setWhiteBalance(this.settings.whiteBalance.selected('key'));
   }
 };
