@@ -96,10 +96,12 @@ CameraController.prototype.bindEvents = function() {
   settings.pictureSizes.on('change:selected', this.onPictureSizeChange);
   settings.recorderProfiles.on('change:selected', this.onRecorderProfileChange);
   settings.flashModes.on('change:selected', this.setFlashMode);
+  settings.flashModes.on('change:selected', this.setHDRForFlash);
   settings.on('change:cameras', this.loadCamera);
   settings.on('change:mode', this.setFlashMode);
   settings.on('change:mode', this.setMode);
   settings.on('change:hdr', this.setHDR);
+  settings.on('change:hdr', this.setFlashForHDR);
 
 
   debug('events bound');
@@ -275,14 +277,6 @@ CameraController.prototype.loadCamera = function(value) {
 CameraController.prototype.setFlashMode = function() {
   var mode = this.settings.flashModes.selected('key');
   this.camera.setFlashMode(mode);
-  if (this.hdrEnabled) {
-    var hdrMode = this.settings.hdr.selected('key');
-    var isFlashOn = mode != 'off' ? true : false;
-    if (hdrMode == 'on' &&  isFlashOn) {
-      this.settings.hdr.select('off');
-    }
-  }
-  
 };
 
 /**
@@ -330,17 +324,29 @@ CameraController.prototype.cancelSelfTimer = function(){
 };
 
 CameraController.prototype.setHDR = function(value) {
-  if ( !this.hdrEnabled ) { return; }
+  if (!this.hdrEnabled) { return; }
+  this.camera.setHDR(value);
+};
+
+CameraController.prototype.setHDRForFlash = function() {
+  if (!this.hdrEnabled) { return; }
+  var mode = this.settings.flashModes.selected('key');
+  var hdrMode = this.settings.hdr.selected('key');
+  var isFlashOn = mode != 'off' ? true : false;
+  if (hdrMode == 'on' &&  isFlashOn) {
+    this.settings.hdr.select('off');
+  }
+};
+
+CameraController.prototype.setFlashForHDR = function(value) {
   var settings = this.app.settings;
   var flashMode = settings.flashModes.selected('key');
   var model = settings.mode.selected('key') == 'video' ?
               settings.flashModesVideo : settings.flashModesPicture;
   var isFlashOn = flashMode != 'off' ? true : false;
-
   if (value == 'on' &&  isFlashOn) {
     model.select('off');
   }
-  this.camera.setHDR(value);
 };
 
 });
