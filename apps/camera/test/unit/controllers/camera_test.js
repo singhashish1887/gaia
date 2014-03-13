@@ -16,8 +16,7 @@ suite('controllers/camera', function() {
       'lib/storage'
     ], function(
       App, CameraController, Camera, Activity,
-      View, Settings, Setting, Storage
-    ) {
+      View, Settings, Setting, Storage) {
       self.CameraController = CameraController.CameraController;
       self.Activity = Activity;
       self.Settings = Settings;
@@ -95,7 +94,8 @@ suite('controllers/camera', function() {
   suite('CameraController#onSettingsConfigured()', function() {
     setup(function() {
       this.app.settings.flashModes.selected.returns('on');
-      this.app.settings.pictureSizes.selected.returns({ width: 480, height: 640 });
+      this.app.settings.pictureSizes.selected.returns({ width: 480,
+        height: 640 });
       this.app.settings.recorderProfiles.selected.returns('cif');
       this.app.settings.hdr.selected.returns('on');
       this.controller = new this.CameraController(this.app);
@@ -104,16 +104,11 @@ suite('controllers/camera', function() {
     test('Should set flashMode', function() {
       this.controller.onSettingsConfigured();
       assert.ok(this.camera.setFlashMode.calledWith('on'));
-      assert.ok(this.camera.setFlashMode.calledWith('auto'));
-      assert.ok(this.camera.setFlashMode.calledWith('off'));
-      assert.ok(this.camera.setHDRForFlash());
     });
 
     test('Should set hdr', function() {
       this.controller.onSettingsConfigured();
       assert.ok(this.camera.setHDR.calledWith('on'));
-      assert.ok(this.camera.setHDR.calledWith('off'));
-      assert.ok(this.camera.setFlashForHDR());
     });
 
     test('Should set recorderProfile', function() {
@@ -136,5 +131,42 @@ suite('controllers/camera', function() {
       assert.ok(configure.calledAfter(this.camera.setRecorderProfile));
       assert.ok(configure.calledAfter(this.camera.setHDR));
     });
+  });
+
+  suite('CameraController()# setHDRForFlash & setFlashForHDR', function() {
+    setup(function() {
+      this.app.settings.flashModes.selected.withArgs('key').returns('on');
+      this.controller = new this.CameraController(this.app);
+      sinon.stub(this.CameraController.prototype, 'onBlur');
+    });
+
+    teardown(function() {
+      this.CameraController.prototype.onBlur.restore();
+    });
+
+    test('check setHDRForFlash', function() {
+      this.app.settings.hdr.selected.withArgs('key').returns('on');
+      this.controller.setHDRForFlash();
+      assert.ok(this.controller.app.settings.hdr.select.calledWith('off'));
+    });
+
+    test('check setFlashForHDR', function() {
+      this.app.settings.mode.selected.withArgs('key').returns('image');
+      this.controller.app.settings.flashModesPicture = sinon.spy();
+      this.controller.app.settings.flashModesPicture.select = sinon.spy();
+      this.controller.setFlashForHDR('on');
+      assert.ok(this.controller.app.settings.flashModesPicture.
+        select.calledWith('off'));
+    });
+
+    test('check setFlashForHDR', function() {
+      this.app.settings.mode.selected.withArgs('key').returns('video');
+      this.controller.app.settings.flashModesVideo = sinon.spy();
+      this.controller.app.settings.flashModesVideo.select = sinon.spy();
+      this.controller.setFlashForHDR('on');
+      assert.ok(this.controller.app.settings.flashModesVideo.
+        select.calledWith('off'));
+    });
+
   });
 });
