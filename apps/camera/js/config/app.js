@@ -4,6 +4,47 @@ define(function(require, exports, module) {
 module.exports = {
   showSettings: true,
   enableZoom: true,
+    lowbattery: {
+    low: {
+      notificationID: 'battery-low-text',
+      icon: 'icon-battery-15',
+      event: 'battery:low',
+      value: 'low',
+      level: 15
+    },
+    verylow: {
+      notificationID: 'battery-verylow-text',
+      icon: 'icon-battery-10',
+      event: 'battery:verylow',
+      value: 'verylow',
+      level: 10
+    },
+    critical: {
+      isPersistent: true,
+      notificationID: 'battery-critical-text',
+      icon: 'icon-battery-10',
+      event: 'battery:critical',
+      value: 'critical',
+      level: 6
+    },
+    shutdown: {
+      isFullScreen: true,
+      notificationID: 'battery-shutdown-text',
+      notificationTitleID: 'battery-shutdown-title',
+      event: 'battery:shutdown',
+      value: 'shutdown',
+      level: 5
+    },
+    healthy: {
+      event: 'battery:healthy',
+      value: 'healthy',
+      level: 100
+    },
+    charging: {
+      event: 'battery:charging',
+      value: 'charging'
+    }
+  },
   viewfinder: {
     scaleType: 'fill'
   },
@@ -190,22 +231,26 @@ module.exports = {
       {
         key: 'off',
         title: 'Off',
-        value: 0
+        value: 0,
+        notificationID: 'timer-set-off'
       },
       {
         key: '3secs',
         value: 3,
-        l10n: { title: '3-seconds' }
+        l10n: { title: '3-seconds' },
+        notificationID: 'timer-set-3secs'
       },
       {
         key: '5secs',
         value: 5,
-        l10n: { title: '5-seconds' }
+        l10n: { title: '5-seconds' },
+        notificationID: 'timer-set-5secs'
       },
       {
         key: '10secs',
         value: 10,
-        l10n: { title: '10-seconds' }
+        l10n: { title: '10-seconds' },
+        notificationID: 'timer-set-10secs'
       }
     ],
     persistent: false,
@@ -219,11 +264,13 @@ module.exports = {
     options: [
       {
         key: 'off',
-        l10n: { title: 'off' }
+        l10n: { title: 'off' },
+        notificationID: 'hdr-set-off'
       },
       {
         key: 'on',
-        l10n: { title: 'on' }
+        l10n: { title: 'on' },
+        notificationID: 'hdr-set-on'
       }
     ],
     persistent: true
@@ -234,15 +281,18 @@ module.exports = {
     options: [
       {
         key: 'normal',
-        title: 'Normal'
+        title: 'Normal',
+        notificationID: 'scene-set-normal'
       },
       {
         key: 'pano',
-        title: 'Panorama'
+        title: 'Panorama',
+        notificationID: 'scene-set-pano'
       },
       {
         key: 'beauty',
-        title: 'Beauty'
+        title: 'Beauty',
+        notificationID: 'scene-set-beauty'
       }
     ],
     persistent: true,
@@ -254,11 +304,13 @@ module.exports = {
     options: [
       {
         key: 'on',
-        l10n: { title: 'on' }
+        l10n: { title: 'on' },
+        notificationID: 'grid-set-on'
       },
       {
         key: 'off',
-        l10n: { title: 'off' }
+        l10n: { title: 'off' },
+        notificationID: 'grid-set-off'
       }
     ],
     selected: 'off',

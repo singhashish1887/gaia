@@ -26,6 +26,7 @@ function SettingsController(app) {
   bindAll(this);
   this.app = app;
   this.settings = app.settings;
+  this.notification = app.views.notification;
   this.configure();
   this.bindEvents();
   debug('initialized');
@@ -98,6 +99,11 @@ SettingsController.prototype.closeSettings = function() {
 SettingsController.prototype.onOptionTap = function(key, setting) {
   setting.select(key);
   this.closeSettings();
+  //setting notification
+  if (setting.selected('notificationID')) {
+    this.notification.showNotification({
+      message: setting.selected('notificationID')});
+  }
 };
 
 /**
